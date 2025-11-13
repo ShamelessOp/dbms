@@ -15,7 +15,6 @@ db.Journal.insertMany([
     {'book_id':5,'book_name':'C++ Java', 'amt':400, 'status': 'Not Available'}
 ]);
 
-// --- 2. Define Map and Reduce functions ---
 var mapFunction = function() {
     emit(this.book_id, this.amt);
 };
@@ -24,14 +23,12 @@ var reduceFunction = function(key, values) {
     return Array.sum(values);
 };
 
-// --- 3. Run the MapReduce operation ---
-// This saves the results into a new collection called 'book_totals'
 db.Journal.mapReduce(
     mapFunction,
     reduceFunction,
     { out: "book_totals" }
 );
 
-// --- 4. View the results ---
 print("--- MapReduce Results (from 'book_totals' collection) ---");
+
 db.book_totals.find().sort({ _id: 1 }).pretty();
